@@ -32,7 +32,7 @@ public class manageOrder extends javax.swing.JFrame {
     public void displayData(){
         try{
             dbConnector dbc = new dbConnector();
-            ResultSet rs = dbc.getData("SELECT *  FROM tbl_product");
+            ResultSet rs = dbc.getData("SELECT p_id,p_name,p_price,p_status   FROM tbl_product");
             pTable.setModel(DbUtils.resultSetToTableModel(rs));
              rs.close();
         }catch(SQLException ex){
