@@ -77,7 +77,7 @@ public class createUserForm extends javax.swing.JFrame {
             
             return newHeight;
         } catch (IOException ex) {
-            System.out.println("No image found!");
+            System.out.println("No image found!!");
         }
         
         return -1;
