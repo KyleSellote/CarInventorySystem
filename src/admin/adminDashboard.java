@@ -198,7 +198,7 @@ public class adminDashboard extends javax.swing.JFrame {
         jLabel11.setFont(new java.awt.Font("Tw Cen MT", 1, 18)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(255, 255, 255));
         jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel11.setText("Manage Products");
+        jLabel11.setText("Manage Orders");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -329,7 +329,7 @@ public class adminDashboard extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jPanel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel3MouseClicked
-      
+   
     }//GEN-LAST:event_jPanel3MouseClicked
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
@@ -383,8 +383,8 @@ public class adminDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_jLabel10MouseClicked
 
     private void jPanel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel4MouseClicked
-        ManageProducts mp = new ManageProducts();
-        mp.setVisible(true);
+        manageOrder mo  =new manageOrder();
+        mo.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jPanel4MouseClicked
 

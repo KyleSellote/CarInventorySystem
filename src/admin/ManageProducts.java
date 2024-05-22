@@ -6,28 +6,37 @@
 package admin;
 
 
-import admin.adminDashboard;
+
 import carinventory.loginForm;
+
 import config.Session;
 
 import config.dbConnector;
-import admin.individualPrinting;
+import static java.awt.AWTEventMulticaster.remove;
 import java.awt.Color;
-import static java.awt.Color.gray;
-import static java.awt.Color.green;
 import static java.awt.Color.red;
 import static java.awt.Color.white;
+
 import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import static javafx.beans.binding.Bindings.select;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 
 import javax.swing.JOptionPane;
 import javax.swing.table.TableModel;
 import net.proteanit.sql.DbUtils;
-import user.createUserForm;
-import static user.createUserForm.getHeightFromWidth;
+import static sun.security.jca.ProviderList.remove;
 
 /**
  *
@@ -43,8 +52,85 @@ public class ManageProducts extends javax.swing.JFrame {
         displayData();
         
     }
-     boolean checkadd = true;
+     public String destination = "";
+    File selectedFile;
+    public String oldpath;
+    public String path;
+    
+    public int FileExistenceChecker(String path){
+        File file = new File(path);
+        String fileName = file.getName();
+        
+        Path filePath = Paths.get("src/userimages/",fileName);
+        boolean fileExists = Files.exists(filePath);
+        
+        if(fileExists){
+            return 1;
+            
+        }else{
+            return 0;
+        }
+              
+    }
+   public static int getHeightFromWidth(String imagePath, int desiredWidth) {
+        try {
+            // Read the image file
+            File imageFile = new File(imagePath);
+            BufferedImage image = ImageIO.read(imageFile);
+            
+            // Get the original width and height of the image
+            int originalWidth = image.getWidth();
+            int originalHeight = image.getHeight();
+            
+            // Calculate the new height based on the desired width and the aspect ratio
+            int newHeight = (int) ((double) desiredWidth / originalWidth * originalHeight);
+            
+            return newHeight;
+        } catch (IOException ex) {
+            System.out.println("No image found!");
+        }
+        
+        return -1;
+    }
     public  ImageIcon ResizeImage(String ImagePath, byte[] pic, JLabel label) {
+    ImageIcon MyImage = null;
+        if(ImagePath !=null){
+            MyImage = new ImageIcon(ImagePath);
+        }else{
+            MyImage = new ImageIcon(pic);
+        }
+        
+    int newHeight = getHeightFromWidth(ImagePath, label.getWidth());
+
+    Image img = MyImage.getImage();
+    Image newImg = img.getScaledInstance(label.getWidth(), newHeight, Image.SCALE_SMOOTH);
+    ImageIcon image = new ImageIcon(newImg);
+    return image;
+}
+      public void imageUpdater(String existingFilePath, String newFilePath){
+        File existingFile = new File(existingFilePath);
+        if (existingFile.exists()) {
+            String parentDirectory = existingFile.getParent();
+            File newFile = new File(newFilePath);
+            String newFileName = newFile.getName();
+            File updatedFile = new File(parentDirectory, newFileName);
+            existingFile.delete();
+            try {
+                Files.copy(newFile.toPath(), updatedFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                System.out.println("Image updated successfully.");
+            } catch (IOException e) {
+                System.out.println("Error occurred while updating the image: "+e);
+            }
+        } else {
+            try{
+                Files.copy(selectedFile.toPath(), new File(destination).toPath(), StandardCopyOption.REPLACE_EXISTING);
+            }catch(IOException e){
+                System.out.println("Error on update!");
+            }
+        }
+   }
+     boolean checkadd = true;
+    public  ImageIcon ResizeImages(String ImagePath, byte[] pic, JLabel label) {
     ImageIcon MyImage = null;
         if(ImagePath !=null){
             MyImage = new ImageIcon(ImagePath);
@@ -116,8 +202,8 @@ public void displayData(){
         us = new javax.swing.JComboBox<>();
         jPanel6 = new javax.swing.JPanel();
         image = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        select = new javax.swing.JButton();
+        remove = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -372,9 +458,19 @@ public void displayData(){
         jPanel6.add(image);
         image.setBounds(40, 10, 170, 140);
 
-        jButton2.setText("SELECT");
+        select.setText("SELECT");
+        select.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectActionPerformed(evt);
+            }
+        });
 
-        jButton3.setText("REMOVE");
+        remove.setText("REMOVE");
+        remove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -392,9 +488,9 @@ public void displayData(){
                                 .addGap(30, 30, 30)
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addComponent(jButton2)
+                                        .addComponent(select)
                                         .addGap(51, 51, 51)
-                                        .addComponent(jButton3))
+                                        .addComponent(remove))
                                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(pid, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel11)
@@ -415,8 +511,8 @@ public void displayData(){
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3))
+                    .addComponent(select)
+                    .addComponent(remove))
                 .addGap(47, 47, 47)
                 .addComponent(jLabel5)
                 .addGap(4, 4, 4)
@@ -547,6 +643,7 @@ public void displayData(){
               pprice.setText("");
               us.setSelectedIndex(0);
         }
+   
     }//GEN-LAST:event_p_addMouseClicked
 
     private void jPanel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel2MouseClicked
@@ -660,6 +757,40 @@ public void displayData(){
         ad.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jPanel1MouseClicked
+
+    private void selectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectActionPerformed
+             JFileChooser fileChooser = new JFileChooser();
+      int returnValue = fileChooser.showOpenDialog(null);
+      if(returnValue == JFileChooser.APPROVE_OPTION){
+        try{
+        selectedFile = fileChooser.getSelectedFile();
+        destination = "src/userimages/"+selectedFile.getName();
+        path = selectedFile.getAbsolutePath();
+        
+        if(FileExistenceChecker(path) == 1){
+            JOptionPane.showMessageDialog(null,"File is Already Exist,Rename or Choose another!");
+            destination = "";
+            path="";
+            
+        }else{
+            image.setIcon(ResizeImages(path,null,image));
+            select.setEnabled(false);
+            remove.setEnabled(true);
+          
+        }
+        }catch(Exception ex){
+            System.out.println("File error!");
+        }
+    }
+    }//GEN-LAST:event_selectActionPerformed
+
+    private void removeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeActionPerformed
+         remove.setEnabled(false);
+        select.setEnabled(true);
+        image.setIcon(null);
+        destination = "";
+        path ="";
+    }//GEN-LAST:event_removeActionPerformed
        
     /**
      * @param args the command line arguments
@@ -713,8 +844,6 @@ public void displayData(){
     private javax.swing.JPanel clear;
     private javax.swing.JPanel delete;
     public javax.swing.JLabel image;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -738,6 +867,8 @@ public void displayData(){
     private javax.swing.JTextField pname;
     private javax.swing.JTextField pprice;
     private javax.swing.JPanel print;
+    private javax.swing.JButton remove;
+    private javax.swing.JButton select;
     private javax.swing.JPanel update;
     private javax.swing.JComboBox<String> us;
     // End of variables declaration//GEN-END:variables

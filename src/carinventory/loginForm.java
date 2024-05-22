@@ -192,7 +192,6 @@ public class loginForm extends javax.swing.JFrame {
 
         ps.setFont(new java.awt.Font("Tw Cen MT", 2, 14)); // NOI18N
         ps.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        ps.setText("Password");
         ps.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 psFocusGained(evt);

@@ -62,7 +62,7 @@ public class createUserForm extends javax.swing.JFrame {
         }
               
     }
-    public static int getHeightFromWidth(String imagePath, int desiredWidth) {
+   public static int getHeightFromWidth(String imagePath, int desiredWidth) {
         try {
             // Read the image file
             File imageFile = new File(imagePath);
@@ -623,7 +623,7 @@ public boolean updateCheck(){
             uf.setVisible(true);
             this.dispose();
         }catch(IOException ex){
-                System.out.println("Inset image error: !"+ex);
+                System.out.println("Insert image error: !"+ex);
                 }
         }else{
             JOptionPane.showMessageDialog(null,"Connection Error!");
