@@ -107,7 +107,7 @@ public class createUserForm extends javax.swing.JFrame {
             existingFile.delete();
             try {
                 Files.copy(newFile.toPath(), updatedFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                System.out.println("Image updated successfully.");
+                System.out.println("Image updated successfully!");
             } catch (IOException e) {
                 System.out.println("Error occurred while updating the image: "+e);
             }
